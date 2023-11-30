@@ -40,7 +40,7 @@ public class AuthServiceImpl implements IAuthService {
      * @param request Метод Регистрации пользователя
      */
     @Override
-    public AskDto register(RegisterRequest request) {
+    public void register(RegisterRequest request) {
 
         if (request.getUsername().isBlank() || request.getEmail().isBlank() ||
                 request.getPassword().isBlank()) {
@@ -70,8 +70,6 @@ public class AuthServiceImpl implements IAuthService {
                         )
                         .build()
         );
-
-        return AskDto.makeDefault(true);
     }
 
     /**

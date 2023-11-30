@@ -1,7 +1,6 @@
 package nomadteam.auth.service;
 
 import jakarta.security.auth.message.AuthException;
-import nomadteam.auth.dto.AskDto;
 import nomadteam.auth.dto.AuthenticationRequest;
 import nomadteam.auth.dto.AuthenticationResponse;
 import nomadteam.auth.dto.RegisterRequest;
@@ -9,8 +8,7 @@ import nomadteam.auth.dto.RegisterRequest;
 public interface IAuthService {
 
     /**
-     * @param request
-     * Метод Аутентификации пользователя
+     * @param request Метод Аутентификации пользователя
      */
 
     AuthenticationResponse authenticate(AuthenticationRequest request);
@@ -19,16 +17,20 @@ public interface IAuthService {
      * @param request Метод Регистрации пользователя
      */
 
-    AskDto register(RegisterRequest request);
+    void register(RegisterRequest request);
 
     /**
-     * @param token
-     * Валидация токена
+     * Метод проверяющий access токен
      */
-
     boolean validate(String token);
 
+    /**
+     * Получение accessToken-a по refresh токену
+     */
     AuthenticationResponse getAccessToken(String refreshToken);
 
+    /**
+     * Получение refreshToken-a по refresh токену
+     */
     AuthenticationResponse refresh(String refreshToken) throws AuthException;
 }
