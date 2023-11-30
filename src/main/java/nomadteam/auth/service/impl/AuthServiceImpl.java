@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import nomadteam.auth.config.security.JwtTokenProvider;
-import nomadteam.auth.dto.AskDto;
 import nomadteam.auth.dto.AuthenticationRequest;
 import nomadteam.auth.dto.AuthenticationResponse;
 import nomadteam.auth.dto.RegisterRequest;
