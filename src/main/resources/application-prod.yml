@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:YeM)@vSBnQFD}
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://db.ixakdgbwsswqdetpbymj.supabase.co:5432/postgres}
