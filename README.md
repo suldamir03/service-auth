@@ -8,7 +8,7 @@ docker-compose up -d --build [название образа]   --- в папке
 
 
 
-<h3>Для DevOps commands</h3>
+<h3>DevOps commands</h3>
 
 ```text
 docker logs d1mir/gateway --- чек логов бэка 
