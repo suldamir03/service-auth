@@ -1,4 +1,4 @@
-package nomadteam.auth.persistence.entity;
+package nomadteam.auth.config.security;
 
 import java.util.Collection;
 import java.util.List;
@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import nomadteam.auth.persistence.entity.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 

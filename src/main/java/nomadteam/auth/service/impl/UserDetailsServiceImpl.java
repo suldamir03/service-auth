@@ -5,7 +5,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import nomadteam.auth.persistence.entity.CustomUserDetails;
+import nomadteam.auth.config.security.CustomUserDetails;
 import nomadteam.auth.persistence.entity.UserCredentials;
 import nomadteam.auth.persistence.repo.UserCredentialsRepository;
 import org.springframework.security.core.userdetails.UserDetails;

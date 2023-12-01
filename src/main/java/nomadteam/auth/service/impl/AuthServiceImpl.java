@@ -14,6 +14,7 @@ import nomadteam.auth.dto.RegisterRequest;
 import nomadteam.auth.exception.BadRequestException;
 import nomadteam.auth.persistence.entity.ERole;
 import nomadteam.auth.persistence.entity.UserCredentials;
+import nomadteam.auth.persistence.entity.UserStatus;
 import nomadteam.auth.persistence.repo.RoleRepository;
 import nomadteam.auth.persistence.repo.UserCredentialsRepository;
 import nomadteam.auth.service.IAuthService;
@@ -67,6 +68,7 @@ public class AuthServiceImpl implements IAuthService {
                                         roleRepository.findRoleByName(ERole.ROLE_USER)
                                 )
                         )
+                        .status(UserStatus.ACTIVE)
                         .build()
         );
     }
