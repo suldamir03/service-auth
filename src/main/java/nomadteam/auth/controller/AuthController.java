@@ -1,5 +1,6 @@
 package nomadteam.auth.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.security.auth.message.AuthException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,7 @@ public class AuthController {
     IAuthService authService;
 
     @PostMapping("/registration")
+    @Operation(summary = "Registration. Doesn't require  any token")
     public ResponseEntity<HttpStatus> register(@RequestBody RegisterRequest request) {
         log.info("Register user: {}", request);
         authService.register(request);
@@ -39,12 +41,14 @@ public class AuthController {
 
 
     @PostMapping(value = "/login", produces = "application/json")
+    @Operation(summary = "Login. Doesn't require  any token")
     public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthenticationRequest request) {
         log.info("Authentication request: {}", request);
         return ResponseEntity.ok(authService.authenticate(request));
     }
 
     @GetMapping("/validate")
+    @Operation(summary = "Validate token")
     public ResponseEntity<AskDto> validate(@RequestParam("token") String token) {
         log.info("Validate token: {}", token);
         if (!authService.validate(token)) {
@@ -55,12 +59,14 @@ public class AuthController {
     }
 
     @PostMapping("/token")
+    @Operation(summary = "Getting new access token via refresh token")
     public ResponseEntity<AuthenticationResponse> getNewAccessToken(@RequestBody RefreshJwtRequest request) {
         final AuthenticationResponse token = authService.getAccessToken(request.getRefreshToken());
         return ResponseEntity.ok(token);
     }
 
     @PostMapping("/refresh")
+    @Operation(summary = "Getting new refresh token via refresh token")
     public ResponseEntity<AuthenticationResponse> getNewRefreshToken(@RequestBody RefreshJwtRequest request)
             throws AuthException {
         final AuthenticationResponse token = authService.refresh(request.getRefreshToken());
