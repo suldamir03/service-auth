@@ -36,8 +36,6 @@ public class UserCredentials {
     String username;
     String email;
     String password;
-    String firstName;
-    String lastName;
     @Enumerated(EnumType.STRING)
     UserStatus status;
     @OneToMany(fetch = FetchType.EAGER)
