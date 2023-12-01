@@ -13,13 +13,10 @@ import org.springframework.security.core.GrantedAuthority;
 public class CustomAuthentication extends UsernamePasswordAuthenticationToken {
 
     Long id;
-    String email;
 
     public CustomAuthentication(Object principal, Object credentials,
-            Collection<? extends GrantedAuthority> authorities,
-            Long id, String email) {
+            Collection<? extends GrantedAuthority> authorities, Long id) {
         super(principal, credentials, authorities);
         this.id = id;
-        this.email = email;
     }
 }

@@ -15,15 +15,15 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import javax.crypto.SecretKey;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import nomadteam.auth.persistence.entity.Role;
 import nomadteam.auth.persistence.entity.UserCredentials;
 import nomadteam.auth.persistence.repo.UserRepository;
-import nomadteam.auth.service.impl.UserDetailsServiceImpl;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -36,9 +36,8 @@ public class JwtTokenProvider {
     private final SecretKey jwtAccessSecret = Keys.hmacShaKeyFor(Decoders.BASE64.decode(JWT_ACCESS_SECRET));
     private final SecretKey jwtRefreshSecret = Keys.hmacShaKeyFor(Decoders.BASE64.decode(JWT_REFRESH_SECRET));
 
-    private final UserDetailsServiceImpl userDetailsImpl;
-
     private final UserRepository userRepository;
+
 
     public String generateAccessToken(String username, Collection<? extends GrantedAuthority> roles) {
         UserCredentials user = userRepository.findUserCredentialsByUsername(username);
@@ -71,11 +70,15 @@ public class JwtTokenProvider {
     }
 
     public CustomAuthentication getAuthentication(String token) {
-        UserDetails userDetails = userDetailsImpl.loadUserByUsername(getUsername(token));
+        CustomUserDetails userDetails = CustomUserDetails.builder()
+                .username(getUsername(token))
+                .password("")
+                .roles(getRoles(token))
+                .build();
         return new CustomAuthentication(
                 userDetails, "",
                 userDetails.getAuthorities(),
-                getId(token), getEmail(token)
+                getId(token)
         );
     }
 
@@ -83,13 +86,14 @@ public class JwtTokenProvider {
         return Long.valueOf(getAccessClaims(token).get("id").toString());
     }
 
-    public String getEmail(String token) {
-        return getAccessClaims(token).get("email").toString();
-    }
-
     public String getUsername(String token) {
         return getAccessClaims(token).getSubject();
     }
+
+    public List<Role> getRoles(String token) {
+        return (List<Role>) getAccessClaims(token).get("auth");
+    }
+
 
     public String resolveToken(HttpServletRequest req) {
         String bearerToken = req.getHeader("Authorization");
@@ -98,6 +102,7 @@ public class JwtTokenProvider {
         }
         return null;
     }
+
     public boolean validateAccessToken(@NonNull String accessToken) {
         return validateToken(accessToken, jwtAccessSecret);
     }
@@ -105,6 +110,7 @@ public class JwtTokenProvider {
     public boolean validateRefreshToken(@NonNull String refreshToken) {
         return validateToken(refreshToken, jwtRefreshSecret);
     }
+
     public boolean validateToken(String token, @NonNull Key secret) {
         try {
             Jwts.parserBuilder()
@@ -125,6 +131,7 @@ public class JwtTokenProvider {
         }
         return false;
     }
+
     public Claims getAccessClaims(@NonNull String token) {
         return getClaims(token, jwtAccessSecret);
     }
