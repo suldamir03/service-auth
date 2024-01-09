@@ -57,7 +57,6 @@ public class AuthServiceImpl implements IAuthService {
         }
 
         request.setPassword(passwordEncoder.encode(request.getPassword()));
-
         log.info("Save user: {}", request);
         userCredentialsRepository.saveAndFlush(
                 UserCredentials.builder()
@@ -66,6 +65,9 @@ public class AuthServiceImpl implements IAuthService {
                         .password(request.getPassword())
                         .roles(Collections.singletonList(
                                         roleRepository.findRoleByName(ERole.ROLE_USER)
+                                                .orElseThrow(
+                                                        () -> new RuntimeException("Role cannot be null")
+                                                )
                                 )
                         )
                         .status(UserStatus.ACTIVE)

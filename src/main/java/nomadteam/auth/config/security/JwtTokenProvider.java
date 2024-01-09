@@ -43,9 +43,8 @@ public class JwtTokenProvider {
         UserCredentials user = userRepository.findUserCredentialsByUsername(username);
 
         Claims claims = Jwts.claims().setSubject(username);
-        claims.put("auth", roles);
+        claims.put("auth", roles.stream().toList());
         claims.put("id", user.getId());
-        claims.put("email", user.getEmail());
 
         Date now = new Date();
         long validityInMilliseconds = 864_000_000;
