@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.2.0</version>
+    <version>3.1.5</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
   <groupId>nomadteam</groupId>
@@ -15,7 +15,7 @@
   <description>auth</description>
   <properties>
     <java.version>17</java.version>
-    <spring-cloud.version>2023.0.0-RC1</spring-cloud.version>
+    <spring-cloud.version>2022.0.4</spring-cloud.version>
   </properties>
   <dependencies>
     <dependency>
@@ -106,6 +106,17 @@
               <artifactId>lombok</artifactId>
             </exclude>
           </excludes>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>com.spotify</groupId>
+        <artifactId>docker-maven-plugin</artifactId>
+        <version>1.2.2</version>
+        <configuration>
+          <imageName>de1mir/auth:v1.04</imageName>
+          <baseImage>openjdk:17-jdk-alpine</baseImage>
+          <!-- Other Docker build configuration options -->
+
         </configuration>
       </plugin>
     </plugins>
