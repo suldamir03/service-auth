@@ -4,6 +4,7 @@ import java.util.Objects;
 import nomadteam.auth.dto.UserDto;
 import nomadteam.auth.dto.UsernameDto;
 import nomadteam.auth.persistence.entity.User;
+import nomadteam.auth.persistence.entity.UserCredentials;
 
 public class UserMapper {
 
@@ -34,6 +35,13 @@ public class UserMapper {
 
 
     public static UsernameDto toUsernameDto(User user) {
+        return UsernameDto.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .build();
+    }
+
+    public static UsernameDto toUsernameDto(UserCredentials user) {
         return UsernameDto.builder()
                 .id(user.getId())
                 .username(user.getUsername())

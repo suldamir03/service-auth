@@ -7,10 +7,12 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import nomadteam.auth.config.cloud.BlogServiceFeignExchanger;
 import nomadteam.auth.config.security.JwtTokenProvider;
 import nomadteam.auth.dto.auth.AuthenticationRequest;
 import nomadteam.auth.dto.auth.AuthenticationResponse;
 import nomadteam.auth.dto.auth.RegisterRequest;
+import nomadteam.auth.dto.mapper.UserMapper;
 import nomadteam.auth.exception.BadRequestException;
 import nomadteam.auth.persistence.entity.ERole;
 import nomadteam.auth.persistence.entity.UserCredentials;
@@ -35,6 +37,7 @@ public class AuthServiceImpl implements IAuthService {
     AuthenticationManager authenticationManager;
     UserCredentialsRepository userCredentialsRepository;
     RoleRepository roleRepository;
+    BlogServiceFeignExchanger exchanger;
 
     /**
      * @param request Метод Регистрации пользователя
@@ -58,7 +61,7 @@ public class AuthServiceImpl implements IAuthService {
 
         request.setPassword(passwordEncoder.encode(request.getPassword()));
         log.info("Save user: {}", request);
-        userCredentialsRepository.saveAndFlush(
+        final UserCredentials savedUser = userCredentialsRepository.saveAndFlush(
                 UserCredentials.builder()
                         .email(request.getEmail())
                         .username(request.getUsername())
@@ -73,6 +76,8 @@ public class AuthServiceImpl implements IAuthService {
                         .status(UserStatus.ACTIVE)
                         .build()
         );
+
+        exchanger.sendRegisteredUser(UserMapper.toUsernameDto(savedUser));
     }
 
     /**
@@ -83,7 +88,8 @@ public class AuthServiceImpl implements IAuthService {
         Authentication authenticate;
         try {
             authenticate = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(request.getUsername(),
+                    new UsernamePasswordAuthenticationToken(
+                            request.getUsername(),
                             request.getPassword())
             );
         } catch (Exception e) {
