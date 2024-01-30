@@ -93,16 +93,14 @@ class UserServiceImplTest {
                 .thenReturn(Optional.of(user));
 
         assertThrows(
-                BadRequestException.class, () -> {
-                    service.updatePassword(
-                            id,
-                            PasswordUpdateDto.builder()
-                                    .newPassword(newPassword)
-                                    .oldPassword(oldPassword)
-                                    .build(),
-                            authentication
-                    );
-                }
+                BadRequestException.class, () -> service.updatePassword(
+                        id,
+                        PasswordUpdateDto.builder()
+                                .newPassword(newPassword)
+                                .oldPassword(oldPassword)
+                                .build(),
+                        authentication
+                )
         );
     }
 
@@ -113,16 +111,14 @@ class UserServiceImplTest {
                 .thenReturn(Optional.of(user));
 
         assertThrows(
-                BadRequestException.class, () -> {
-                    service.updatePassword(
-                            2L,
-                            PasswordUpdateDto.builder()
-                                    .newPassword(newPassword)
-                                    .oldPassword(oldPassword)
-                                    .build(),
-                            authentication
-                    );
-                }
+                BadRequestException.class, () -> service.updatePassword(
+                        2L,
+                        PasswordUpdateDto.builder()
+                                .newPassword(newPassword)
+                                .oldPassword(oldPassword)
+                                .build(),
+                        authentication
+                )
         );
     }
 }
