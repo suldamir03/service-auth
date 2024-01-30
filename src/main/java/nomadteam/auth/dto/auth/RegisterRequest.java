@@ -1,4 +1,4 @@
-package nomadteam.auth.dto;
+package nomadteam.auth.dto.auth;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

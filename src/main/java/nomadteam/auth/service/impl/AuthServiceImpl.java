@@ -8,9 +8,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import nomadteam.auth.config.security.JwtTokenProvider;
-import nomadteam.auth.dto.AuthenticationRequest;
-import nomadteam.auth.dto.AuthenticationResponse;
-import nomadteam.auth.dto.RegisterRequest;
+import nomadteam.auth.dto.auth.AuthenticationRequest;
+import nomadteam.auth.dto.auth.AuthenticationResponse;
+import nomadteam.auth.dto.auth.RegisterRequest;
 import nomadteam.auth.exception.BadRequestException;
 import nomadteam.auth.persistence.entity.ERole;
 import nomadteam.auth.persistence.entity.UserCredentials;
@@ -80,10 +80,15 @@ public class AuthServiceImpl implements IAuthService {
      */
     @Override
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        Authentication authenticate = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getUsername(),
-                        request.getPassword())
-        );
+        Authentication authenticate;
+        try {
+            authenticate = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(request.getUsername(),
+                            request.getPassword())
+            );
+        } catch (Exception e) {
+            throw new BadRequestException("Bad Credentials");
+        }
         var accessToken = jwtProvider.generateAccessToken(request.getUsername(), authenticate.getAuthorities());
         var refreshToken = jwtProvider.generateRefreshToken(request.getUsername());
         return AuthenticationResponse.builder()
