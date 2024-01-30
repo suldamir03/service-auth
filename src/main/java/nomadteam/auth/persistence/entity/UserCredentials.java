@@ -7,7 +7,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import java.util.List;
 import lombok.AccessLevel;
@@ -36,9 +36,11 @@ public class UserCredentials {
     String username;
     String email;
     String password;
+
     @Enumerated(EnumType.STRING)
     UserStatus status;
-    @OneToMany(fetch = FetchType.EAGER)
+
+    @ManyToMany(fetch = FetchType.EAGER)
     List<Role> roles;
 
 

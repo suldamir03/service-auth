@@ -1,5 +1,7 @@
 package nomadteam.auth.config.security;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -16,19 +18,18 @@ import java.time.ZoneId;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import javax.crypto.SecretKey;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nomadteam.auth.persistence.entity.Role;
 import nomadteam.auth.persistence.entity.UserCredentials;
-import nomadteam.auth.persistence.repo.UserRepository;
+import nomadteam.auth.persistence.repo.UserCredentialsRepository;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-@RequiredArgsConstructor
 public class JwtTokenProvider {
 
     private final String JWT_ACCESS_SECRET = "B24F80D9D2148D08791DE709E28C6C4F5DD68AF097AC5143DD6D4EFF942F2D17";
@@ -36,8 +37,13 @@ public class JwtTokenProvider {
     private final SecretKey jwtAccessSecret = Keys.hmacShaKeyFor(Decoders.BASE64.decode(JWT_ACCESS_SECRET));
     private final SecretKey jwtRefreshSecret = Keys.hmacShaKeyFor(Decoders.BASE64.decode(JWT_REFRESH_SECRET));
 
-    private final UserRepository userRepository;
+    private final UserCredentialsRepository userRepository;
+    public ObjectMapper mapper = new ObjectMapper();
 
+
+    public JwtTokenProvider(UserCredentialsRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public String generateAccessToken(String username, Collection<? extends GrantedAuthority> roles) {
         UserCredentials user = userRepository.findUserCredentialsByUsername(username);
@@ -69,6 +75,14 @@ public class JwtTokenProvider {
     }
 
     public CustomAuthentication getAuthentication(String token) {
+        UserCredentials user = userRepository.findUserCredentialsByUsername(getUsername(token));
+        if (Objects.equals(user.getId(), getId(token))) {
+            throw new RuntimeException(
+                    String.format(
+                            "Invalid token, User with id %s and username %s doesn't exists in system",
+                            getId(token), user.getUsername())
+            );
+        }
         CustomUserDetails userDetails = CustomUserDetails.builder()
                 .username(getUsername(token))
                 .password("")
@@ -90,7 +104,11 @@ public class JwtTokenProvider {
     }
 
     public List<Role> getRoles(String token) {
-        return (List<Role>) getAccessClaims(token).get("auth");
+        return mapper.convertValue(
+                getAccessClaims(token).get("auth"),
+                new TypeReference<>() {
+                }
+        );
     }
 
 
@@ -146,5 +164,4 @@ public class JwtTokenProvider {
                 .parseClaimsJws(token)
                 .getBody();
     }
-
 }

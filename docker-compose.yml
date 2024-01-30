@@ -1,0 +1,11 @@
+version: '3.1'
+services:
+  auth:
+    image: d1mir/auth:v1.01
+    container_name: nauth
+    ports:
+      - "9000:9000"
+    environment:
+      SPRING_PROFILE: prod
+      EUREKA_HOST: discovery
+      eureka.client.enabled: false

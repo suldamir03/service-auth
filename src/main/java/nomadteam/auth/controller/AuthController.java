@@ -1,16 +1,17 @@
 package nomadteam.auth.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.security.auth.message.AuthException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import nomadteam.auth.dto.AskDto;
-import nomadteam.auth.dto.AuthenticationRequest;
-import nomadteam.auth.dto.AuthenticationResponse;
-import nomadteam.auth.dto.RefreshJwtRequest;
-import nomadteam.auth.dto.RegisterRequest;
+import nomadteam.auth.dto.auth.AuthenticationRequest;
+import nomadteam.auth.dto.auth.AuthenticationResponse;
+import nomadteam.auth.dto.auth.RefreshJwtRequest;
+import nomadteam.auth.dto.auth.RegisterRequest;
 import nomadteam.auth.exception.BadRequestException;
 import nomadteam.auth.service.IAuthService;
 import org.springframework.http.HttpStatus;
@@ -26,7 +27,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@CrossOrigin("http://localhost:4200")
+@CrossOrigin("*")
+@Tag(name = "Контроллер авторизации", description = "Логика аутентификации и регистрации")
 public class AuthController {
 
     IAuthService authService;

@@ -1,9 +1,9 @@
 package nomadteam.auth.service;
 
 import jakarta.security.auth.message.AuthException;
-import nomadteam.auth.dto.AuthenticationRequest;
-import nomadteam.auth.dto.AuthenticationResponse;
-import nomadteam.auth.dto.RegisterRequest;
+import nomadteam.auth.dto.auth.AuthenticationRequest;
+import nomadteam.auth.dto.auth.AuthenticationResponse;
+import nomadteam.auth.dto.auth.RegisterRequest;
 
 public interface IAuthService {
 
