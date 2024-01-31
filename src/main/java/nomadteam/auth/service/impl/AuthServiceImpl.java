@@ -2,6 +2,7 @@ package nomadteam.auth.service.impl;
 
 import io.jsonwebtoken.Claims;
 import jakarta.security.auth.message.AuthException;
+import jakarta.ws.rs.NotFoundException;
 import java.util.Collections;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -85,6 +86,12 @@ public class AuthServiceImpl implements IAuthService {
      */
     @Override
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
+        if (!userCredentialsRepository.existsByUsername(request.getUsername())) {
+            throw new NotFoundException(
+                    String.format("User with login %s not found", request.getUsername())
+            );
+        }
+
         Authentication authenticate;
         try {
             authenticate = authenticationManager.authenticate(
@@ -95,6 +102,7 @@ public class AuthServiceImpl implements IAuthService {
         } catch (Exception e) {
             throw new BadRequestException("Bad Credentials");
         }
+
         var accessToken = jwtProvider.generateAccessToken(request.getUsername(), authenticate.getAuthorities());
         var refreshToken = jwtProvider.generateRefreshToken(request.getUsername());
         return AuthenticationResponse.builder()

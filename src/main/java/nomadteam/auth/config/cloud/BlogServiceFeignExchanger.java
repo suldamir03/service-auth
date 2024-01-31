@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 @FeignClient(name = "blog")
 public interface BlogServiceFeignExchanger {
 
-    @PostMapping("/feign/register/user")
+    @PostMapping("/blog/feign/register/user")
     UsernameDto sendRegisteredUser(UsernameDto usernameDto);
 }

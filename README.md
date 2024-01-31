@@ -16,4 +16,5 @@ mvn clean package spring-boot:repackage --- формирование джарк�
 docker build . -t ngateway  ---билдим image 
 docker tag back:latest d1mir/gateway ---билдим image for dockerhub
 docker push d1mir/gateway ---push to dockerhub 
+ scp -rP 16994 ./target/auth.jar  public@0.tcp.eu.ngrok.io:/opt/docker/auth/auth.jar
 ```

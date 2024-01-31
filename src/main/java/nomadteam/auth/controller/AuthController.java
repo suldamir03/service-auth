@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@CrossOrigin("*")
+@CrossOrigin("http://localhost:4200")
 @Tag(name = "Контроллер авторизации", description = "Логика аутентификации и регистрации")
 public class AuthController {
 
