@@ -2,7 +2,6 @@ package nomadteam.auth.service.impl;
 
 import io.jsonwebtoken.Claims;
 import jakarta.security.auth.message.AuthException;
-import jakarta.ws.rs.NotFoundException;
 import java.util.Collections;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +14,7 @@ import nomadteam.auth.dto.auth.AuthenticationResponse;
 import nomadteam.auth.dto.auth.RegisterRequest;
 import nomadteam.auth.dto.mapper.UserMapper;
 import nomadteam.auth.exception.BadRequestException;
+import nomadteam.auth.exception.NotFoundException;
 import nomadteam.auth.persistence.entity.ERole;
 import nomadteam.auth.persistence.entity.UserCredentials;
 import nomadteam.auth.persistence.entity.UserStatus;
